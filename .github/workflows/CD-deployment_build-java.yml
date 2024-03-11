@@ -19,7 +19,9 @@
                 ./scripts/dockerfiles/Dockerfile.template-java
               sparse-checkout-cone-mode: false
           - name: Copying Dockerfile
-            run: ls -la
+            run: |
+              cd dockerfiles
+              ls -la
 #            run: cp ./dockerfiles/Dockerfile.template-java ./Dockerfile
     #--------------------------------------------------
           - name: 'Setup Java JDK'
