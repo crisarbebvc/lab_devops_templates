@@ -11,6 +11,7 @@
             uses: actions/checkout@v4
             with:
                 path: java_app
+          - run: tree -d .
           - name: checkout del repositorio templates
             uses: actions/checkout@v4
             with:
