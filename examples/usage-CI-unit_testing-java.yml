@@ -1,0 +1,26 @@
+#Esto es un ejemplo de como debería implementar los workflows reusables para preubas unitarias para JAVA.
+#La version y el tag pueden variar, asegurese usar los valores correspondientes a las definiciones y requerimientos de su proyecto.
+
+#En este caso especifico, se usa la version 17 de JAVA y la version v1.0.0 del workflow de unit testing
+name: Unit Testing Execution
+
+#NOTA: Procure no modificar este bloque ya que esto asegura que se ejecuten las pruebas unitarias según lo definido.
+#Modificarlos puede llevar a romper lineamientos de calidad, seguridad e interrumpir los flujos de CI/CD.
+on:
+  pull_request:
+    branches:
+      - development
+      - 'release/*'
+      - preprod
+      - prod
+
+jobs:
+  call-unitestig-workflow:
+    #Uso de la version v.1.0.0 del workflow
+    uses: bvcco/lab_devops_templates/.github/workflows/CI-unit_testing-java.yml@v1.0.0
+    with:
+      #Uso de la versión 17 de JAVA
+      java-version: 17
+      #Uso de la distrubución temurin.
+      #Disponibles y aceptados: temurin, corretto
+      distribution: 'temurin'
