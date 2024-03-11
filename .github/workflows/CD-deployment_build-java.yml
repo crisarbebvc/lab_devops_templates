@@ -7,7 +7,6 @@
       build:
         runs-on: ubuntu-latest
         steps:
-            secrets: inherit
           - name: 'Checkout Repo'
             uses: actions/checkout@v4
             with:
