@@ -1,18 +1,13 @@
 ---
     name: Java Maven Build & Publish Artifact
     
-    on: 
-        workflow_call:
-            secrets:
-                HARBOR_USERNAME:
-                  required: true
-                HARBOR_PASSWORD:
-                    required: true
+    on: workflow_call
     
     jobs:
       build:
         runs-on: ubuntu-latest
         steps:
+            secrets: inherit
           - name: 'Checkout Repo'
             uses: actions/checkout@v4
             with:
