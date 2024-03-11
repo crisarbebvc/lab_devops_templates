@@ -10,7 +10,7 @@
           - name: checkout del repositorio templates
             uses: actions/checkout@v4
             with:
-              repository: 'bvcco/lab_devops_templates'
+              repository: 'crisarbebvc/lab_devops_templates'
               ref: 'development'
               path: './dockerfiles'
               sparse-checkout: |
