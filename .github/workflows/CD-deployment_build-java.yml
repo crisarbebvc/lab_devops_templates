@@ -14,7 +14,7 @@
               ref: 'development'
               path: './dockerfiles'
               sparse-checkout: |
-                Dockerfile.template-java
+                scripts/dockerfiles/Dockerfile.template-java
               sparse-checkout-cone-mode: false
           - name: Copying Dockerfile
             run: cp ./dockerfiles/Dockerfile.template-java ./Dockerfile
