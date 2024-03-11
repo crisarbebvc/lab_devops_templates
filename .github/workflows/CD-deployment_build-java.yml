@@ -11,7 +11,6 @@
             uses: actions/checkout@v4
             with:
                 path: java_app
-          - run: tree -a .
           - name: checkout del repositorio templates
             uses: actions/checkout@v4
             with:
@@ -21,6 +20,8 @@
               sparse-checkout: |
                 scripts/dockerfiles/Dockerfile.template-java
               sparse-checkout-cone-mode: false
+          - name: tree directory
+            run: tree -a .
           - name: Copying Dockerfile
             run: cp ./dockerfile/scripts/dockerfiles/Dockerfile.template-java ./Dockerfile
     #--------------------------------------------------
