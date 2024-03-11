@@ -9,16 +9,19 @@
         steps:
           - name: 'Checkout Repo'
             uses: actions/checkout@v4
+            with:
+                path: java_app
           - name: checkout del repositorio templates
             uses: actions/checkout@v4
             with:
               repository: 'crisarbebvc/lab_devops_templates'
               ref: 'main'
+              path: dockerfile
               sparse-checkout: |
                 scripts/dockerfiles/Dockerfile.template-java
               sparse-checkout-cone-mode: false
           - name: Copying Dockerfile
-            run: cp ./scripts/dockerfiles/Dockerfile.template-java ./Dockerfile
+            run: cp ./dockerfile/scripts/dockerfiles/Dockerfile.template-java ./Dockerfile
     #--------------------------------------------------
           - name: 'Setup Java JDK'
             uses: actions/setup-java@v4 # more documentation
@@ -26,14 +29,19 @@
               java-version: '17'
               distribution: 'temurin'
               cache: maven
+          - run: cd java_app
           - run: mvn org.apache.maven.plugins:maven-dependency-plugin:3.6.1:analyze-report -DignoreNonCompile=true
           - run: tar -czf report.tar.gz target/site/
           - run: ls -la ./target
           - run: ls -la .
           - name: Compile the Project
-            run: mvn compile
+            run: |
+                cd java_app
+                mvn compile
           - name: Build with Maven
-            run: mvn -B package --file pom.xml
+            run: |
+                cd java_app
+                mvn -B package --file pom.xml
           - run: mvn --batch-mode --update-snapshots verify
           - run: mkdir staging && cp target/gs-maven-0.1.0.jar staging && mkdir report && cp report.tar.gz report
           - uses: actions/upload-artifact@v4
@@ -54,8 +62,6 @@
             with:
               name: jar-artifact
               path: staging/
-          - name: 'Checkout Repo'
-            uses: actions/checkout@v4
           - name: Build and push
             run: |
               AUTH=$(echo -n ${{ secrets.HARBOR_USERNAME  }}:${{ secrets.HARBOR_PASSWORD }} | base64)
@@ -74,7 +80,7 @@
                 -v $(pwd):/workspace \
                 -v $(pwd)/config.json:/kaniko/.docker/config.json:ro \
                 gcr.io/kaniko-project/executor:latest \
-                  --context . \
+                  --context ./java_app \
                   --build-arg "jdk_image=eclipse-temurin:17" \
                   --build-arg "jar_file_path=target/demo-env_vars-1.0.jar" \
                   --destination registry.nuamexchange.com/test-devops/jar-artifact:${{ github.run_number }} \
