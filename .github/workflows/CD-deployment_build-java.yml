@@ -11,7 +11,7 @@
             uses: actions/checkout@v4
             with:
               repository: 'crisarbebvc/lab_devops_templates'
-              ref: 'development'
+              ref: 'main'
               path: './dockerfiles'
               sparse-checkout: |
                 scripts/dockerfiles/Dockerfile.template-java
