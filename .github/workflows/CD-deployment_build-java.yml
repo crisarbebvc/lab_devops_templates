@@ -1,7 +1,13 @@
 ---
     name: Java Maven Build & Publish Artifact
     
-    on: workflow_call
+    on: 
+        workflow_call:
+            secrets:
+                HARBOR_USERNAME:
+                  required: true
+                HARBOR_PASSWORD:
+                    required: true
     
     jobs:
       build:
