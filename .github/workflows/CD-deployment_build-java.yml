@@ -22,6 +22,7 @@
             run: |
               ls -la ./dockerfiles
               ls -la ./dockerfiles/scripts
+              ls -la ./dockerfiles/scripts/dockerfiles
 #            run: cp ./dockerfiles/Dockerfile.template-java ./Dockerfile
     #--------------------------------------------------
           - name: 'Setup Java JDK'
