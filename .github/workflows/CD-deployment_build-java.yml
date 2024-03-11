@@ -35,8 +35,6 @@
                 cd java_app
                 mvn org.apache.maven.plugins:maven-dependency-plugin:3.6.1:analyze-report -DignoreNonCompile=true
                 tar -czf report.tar.gz target/site/
-          - run: ls -la ./target
-          - run: ls -la .
           - name: Compile the Project
             run: |
                 cd java_app
