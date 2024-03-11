@@ -7,6 +7,8 @@
       build:
         runs-on: ubuntu-latest
         steps:
+          - name: 'Checkout Repo'
+            uses: actions/checkout@v4
           - name: checkout del repositorio templates
             uses: actions/checkout@v4
             with:
@@ -17,10 +19,8 @@
                 ./scripts/dockerfiles/Dockerfile.template-java
               sparse-checkout-cone-mode: false
           - name: Copying Dockerfile
-            run: cp ./dockerfiles/Dockerfile.template-java ./scripts/Dockerfile
+            run: cp ./dockerfiles/Dockerfile.template-java ./Dockerfile
     #--------------------------------------------------
-          - name: 'Checkout Repo'
-            uses: actions/checkout@v4
           - name: 'Setup Java JDK'
             uses: actions/setup-java@v4 # more documentation
             with:
@@ -78,6 +78,5 @@
                   --context . \
                   --build-arg "jdk_image=eclipse-temurin:17" \
                   --build-arg "jar_file_path=target/demo-env_vars-1.0.jar" \
-                  --dockerfile=./scripts/Dockerfile \
                   --destination registry.nuamexchange.com/test-devops/jar-artifact:${{ github.run_number }} \
     
