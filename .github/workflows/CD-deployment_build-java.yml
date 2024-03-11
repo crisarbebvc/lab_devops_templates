@@ -14,16 +14,11 @@
             with:
               repository: 'crisarbebvc/lab_devops_templates'
               ref: 'main'
-              path: './dockerfiles'
               sparse-checkout: |
                 scripts/dockerfiles/Dockerfile.template-java
               sparse-checkout-cone-mode: false
           - name: Copying Dockerfile
-            run: |
-              ls -la ./dockerfiles
-              ls -la ./dockerfiles/scripts
-              ls -la ./dockerfiles/scripts/dockerfiles
-#            run: cp ./dockerfiles/Dockerfile.template-java ./Dockerfile
+            run: cp ./scripts/dockerfiles/Dockerfile.template-java ./Dockerfile
     #--------------------------------------------------
           - name: 'Setup Java JDK'
             uses: actions/setup-java@v4 # more documentation
