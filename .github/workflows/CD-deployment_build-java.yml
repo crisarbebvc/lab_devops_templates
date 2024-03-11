@@ -81,8 +81,6 @@
                 -v $(pwd)/config.json:/kaniko/.docker/config.json:ro \
                 gcr.io/kaniko-project/executor:latest \
                   --context . \
-                  --build-arg "jdk_image=eclipse-temurin:17" \
-                  --build-arg "jar_file_path=target/demo-env_vars-1.0.jar" \
                   --dockerfile=Dockerfile \
                   --destination registry.nuamexchange.com/test-devops/jar-artifact:${{ github.run_number }} \
     
