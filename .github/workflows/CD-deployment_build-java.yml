@@ -30,7 +30,7 @@
               java-version: '17'
               distribution: 'temurin'
               cache: maven
-          - run: cd java_app
+          - run: cd ./java_app
           - run: mvn org.apache.maven.plugins:maven-dependency-plugin:3.6.1:analyze-report -DignoreNonCompile=true
           - run: tar -czf report.tar.gz target/site/
           - run: ls -la ./target
