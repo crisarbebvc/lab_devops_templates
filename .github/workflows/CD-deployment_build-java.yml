@@ -84,4 +84,4 @@
                   --build-arg "jdk_image=eclipse-temurin:17" \
                   --build-arg "jar_file_path=target/demo-env_vars-1.0.jar" \
                   --dockerfile=Dockerfile \
-                  --destination registry.nuamexchange.com/test-devops/jar-artifact:IMG70 \
+                  --destination registry.nuamexchange.com/test-devops/jar-artifact:IMG70 
