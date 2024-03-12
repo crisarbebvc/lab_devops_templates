@@ -1,89 +1,88 @@
 ---
-    name: Java Maven Build & Publish Artifact
-    
-    on: workflow_call
-    
-    jobs:
-      build:
-        runs-on: ubuntu-latest
-        steps:
-          - name: 'Checkout Repo'
-            uses: actions/checkout@v4
-            with:
-                path: java_app
-          - name: checkout del repositorio templates
-            uses: actions/checkout@v4
-            with:
-              repository: 'crisarbebvc/lab_devops_templates'
-              ref: 'main'
-              path: dockerfile
-              sparse-checkout: |
-                scripts/dockerfiles/Dockerfile.template-java
-              sparse-checkout-cone-mode: false
-          - name: tree directory
-            run: tree -a .
-          - name: Copying Dockerfile
-            run: cp ./dockerfile/scripts/dockerfiles/Dockerfile.template-java ./Dockerfile
-    #--------------------------------------------------
-          - name: 'Setup Java JDK'
-            uses: actions/setup-java@v4 # more documentation
-            with:
-              java-version: '17'
-              distribution: 'temurin'
-              cache: maven
-          - run: |
-                cd java_app
-                mvn org.apache.maven.plugins:maven-dependency-plugin:3.6.1:analyze-report -DignoreNonCompile=true
-                tar -czf report.tar.gz target/site/
-          - name: Compile the Project
-            run: |
-                cd java_app
-                mvn compile
-          - name: Build with Maven
-            run: |
-                cd java_app
-                mvn -B package --file pom.xml
-                mvn --batch-mode --update-snapshots verify
-                mkdir staging && cp target/gs-maven-0.1.0.jar staging && mkdir report && cp report.tar.gz report
-          - uses: actions/upload-artifact@v4
-            with:
-              name: jar-artifact
-              path: ./java_app/staging/
-          - uses: actions/upload-artifact@v4
-            with:
-              name: dependency-report
-              path: ./java_app/report/
-    #------------------------------------------------------
-          - uses: docker/login-action@v3
-            with:
-              registry: registry.nuamexchange.com
-              username: ${{ secrets.HARBOR_USERNAME  }}
-              password: ${{ secrets.HARBOR_PASSWORD }}
-          - uses: actions/download-artifact@v4
-            with:
-              name: jar-artifact
-              path: ./java_app/staging/
-          - name: print credentials    
-            run: echo ${{ secrets.HARBOR_USERNAME  }} - ${{ secrets.HARBOR_PASSWORD }}
-          - name: Build and push
-            run: |
-              AUTH=$(echo -n ${{ secrets.HARBOR_USERNAME  }}:${{ secrets.HARBOR_PASSWORD }} | base64)
-              cat << EOF > config.json
-              {
-                "auths":{
-                  "registry.nuamexchange.com/test-devops/jar-artifact":{
-                    "username":"${{ secrets.HARBOR_USERNAME  }}","password":"${{ secrets.HARBOR_PASSWORD }}","auth":"${AUTH}"
-                  }
+  name: Java Maven Build & Publish Artifact
+  
+  on: workflow_call
+  
+  jobs:
+    build:
+      runs-on: ubuntu-latest
+      steps:
+        - name: 'Checkout Repo'
+          uses: actions/checkout@v4
+          with:
+              path: java_app
+        - name: checkout del repositorio templates
+          uses: actions/checkout@v4
+          with:
+            token: ${{ secrets.DEVOPS_NUAM }}
+            repository: 'crisarbebvc/lab_devops_templates'
+            ref: 'main'
+            path: dockerfile
+            sparse-checkout: |
+              scripts/dockerfiles/Dockerfile.template-java
+            sparse-checkout-cone-mode: false
+        - name: tree directory
+          run: tree -a .
+        - name: Copying Dockerfile
+          run: cp ./dockerfile/scripts/dockerfiles/Dockerfile.template-java ./Dockerfile
+  #--------------------------------------------------
+        - name: 'Setup Java JDK'
+          uses: actions/setup-java@v4 # more documentation
+          with:
+            java-version: '17'
+            distribution: 'temurin'
+            cache: maven
+        - run: |
+              cd java_app
+              mvn org.apache.maven.plugins:maven-dependency-plugin:3.6.1:analyze-report -DignoreNonCompile=true
+              tar -czf report.tar.gz target/site/
+        - name: Compile the Project
+          run: |
+              cd java_app
+              mvn compile
+        - name: Build with Maven
+          run: |
+              cd java_app
+              mvn -B package --file pom.xml
+              mvn --batch-mode --update-snapshots verify
+              mkdir staging && cp target/gs-maven-0.1.0.jar staging && mkdir report && cp report.tar.gz report
+        - uses: actions/upload-artifact@v4
+          with:
+            name: jar-artifact
+            path: ./java_app/staging/
+        - uses: actions/upload-artifact@v4
+          with:
+            name: dependency-report
+            path: ./java_app/report/
+  #------------------------------------------------------
+        - uses: docker/login-action@v3
+          with:
+            registry: registry.nuamexchange.com
+            username: ${{ secrets.HARBOR_USERNAME  }}
+            password: ${{ secrets.HARBOR_PASSWORD }}
+        - uses: actions/download-artifact@v4
+          with:
+            name: jar-artifact
+            path: ./java_app/staging/
+        - name: Build and push
+          run: |
+            AUTH=$(echo -n ${{ secrets.HARBOR_USERNAME  }}:${{ secrets.HARBOR_PASSWORD }} | base64)
+            cat << EOF > config.json
+            {
+              "auths":{
+                "registry.nuamexchange.com/test-devops/jar-artifact":{
+                  "username":"${{ secrets.HARBOR_USERNAME  }}","password":"${{ secrets.HARBOR_PASSWORD }}","auth":"${AUTH}"
                 }
               }
-              EOF
-              cd java_app
-              docker run \
-                -v $(pwd):/workspace \
-                -v $(pwd)/config.json:/kaniko/.docker/config.json:ro \
-                gcr.io/kaniko-project/executor:latest \
-                  --context . \
-                  --build-arg "jdk_image=eclipse-temurin:17" \
-                  --build-arg "jar_file_path=target/demo-env_vars-1.0.jar" \
-                  --dockerfile=Dockerfile \
-                  --destination registry.nuamexchange.com/test-devops/jar-artifact:IMG70 \
+            }
+            EOF
+            cd java_app
+            docker run \
+              -v $(pwd):/workspace \
+              -v $(pwd)/config.json:/kaniko/.docker/config.json:ro \
+              gcr.io/kaniko-project/executor:latest \
+                --context . \
+                --build-arg "jdk_image=eclipse-temurin:17" \
+                --build-arg "jar_file_path=target/demo-env_vars-1.0.jar" \
+                --dockerfile=Dockerfile \
+                --destination registry.nuamexchange.com/test-devops/jar-artifact:${{ github.run_number }} \
