@@ -1,6 +1,10 @@
-ARG jdk_image
-FROM $jdk_image
+FROM alpine:latest
+RUN groupadd -r myuser && useradd -r -g myuser myuser
+# Etiqueta del maintainer
 LABEL maintainer="nuamx.com"
 ARG jar_file_path
+# Copia el archivo JAR o binario compilado a la raíz de la imagen
 COPY $jar_file_path app.jar
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+USER myuser
+# Comando de entrada para ejecutar la aplicación (ajusta según tu aplicación)
+CMD ["java", "-jar", "/app.jar"]
