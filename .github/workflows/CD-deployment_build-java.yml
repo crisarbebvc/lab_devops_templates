@@ -86,4 +86,4 @@
                 --build-arg "jdk_image=eclipse-temurin:17" \
                 --build-arg "jar_file_path=target/*.jar" \
                 --dockerfile=Dockerfile \
-                --destination registry.nuamexchange.com/test-devops/jar-artifact:2.0.21
+                --destination registry.nuamexchange.com/test-devops/jar-artifact:2.0.24
