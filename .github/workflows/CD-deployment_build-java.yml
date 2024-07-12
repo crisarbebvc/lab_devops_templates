@@ -66,7 +66,7 @@
             cat << EOF > config.json
             {
               "auths":{
-                "registry.nuamexchange.com/test-devops/jar-artifact":{
+                "registry.nuamexchange.com":{
                   "username":"cristian.arbelaez@nuamx.com","password":"${{ secrets.HARBOR_PASSWORD }}","auth":"${AUTH}"
                 }
               }
