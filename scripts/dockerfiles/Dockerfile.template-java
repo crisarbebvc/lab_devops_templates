@@ -1,4 +1,4 @@
-FROM temurin:17-jdk-alpine
+FROM eclipse-temurin:17
 # Etiqueta del maintainer
 LABEL maintainer="nuamx.com"
 # Copia el archivo JAR o binario compilado a la raíz de la imagen
