@@ -81,7 +81,7 @@
             docker run \
               -v $(pwd):/workspace \
               -v $(pwd)/config.json:/kaniko/.docker/config.json:ro \
-              gcr.io/kaniko-project/executor:latest-debug \
+              gcr.io/kaniko-project/executor:latest \
                 --context . \
                 --dockerfile=Dockerfile \
-                --destination crisarbenuam/test:2.1
+                --destination docker.io/crisarbenuam/test:2.1
