@@ -76,7 +76,7 @@
             docker run \
               -v $(pwd):/workspace \
               -v $(pwd)/config.json:/kaniko/.docker/config.json:ro \
-              gcr.io/kaniko-project/executor:latest \
+              gcr.io/kaniko-project/executor:v1.6.0 \
                 --context . \
                 --dockerfile=Dockerfile \
                 --destination registry.nuamexchange.com/test-devops/jar-artifact:2.0.26
