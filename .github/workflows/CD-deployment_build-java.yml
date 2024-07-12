@@ -84,4 +84,5 @@
               gcr.io/kaniko-project/executor:latest \
                 --context . \
                 --dockerfile=Dockerfile \
-                --destination crisarbenuam/test:1.0
+                --destination crisarbenuam/test:1.0 \
+                --insecure
