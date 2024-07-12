@@ -61,7 +61,7 @@
             path: ./java_app/staging/
         - uses: docker/login-action@v1
           with:
-            registry: crisarbenuam/test
+            registry: docker.io/crisarbenuam
             username: crisarbenuam
             password: ${{ secrets.HARBOR_PASSWORD }}
         - name: Build and push
@@ -71,7 +71,7 @@
             cat << EOF > config.json
             {
               "auths":{
-                "crisarbenuam/test":{
+                "docker.io/crisarbenuam":{
                   "username":"crisarbenuam","password":"${{ secrets.HARBOR_PASSWORD }}","auth":"${AUTH}"
                 }
               }
