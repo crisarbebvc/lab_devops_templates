@@ -65,23 +65,28 @@
             username: crisarbenuam
             password: ${{ secrets.HARBOR_PASSWORD }}
         - name: Build and push
-          run: |
-            cd java_app
-            AUTH=$(echo -n crisarbenuam:${{ secrets.HARBOR_PASSWORD }} | base64)
-            cat << EOF > config.json
-            {
-              "auths":{
-                "docker.io/crisarbenuam":{
-                  "username":"crisarbenuam","password":"${{ secrets.HARBOR_PASSWORD }}","auth":"${AUTH}"
-                }
-              }
-            }
-            EOF
-            tree -a .
-            docker run \
-              -v $(pwd):/workspace \
-              -v $(pwd)/config.json:/kaniko/.docker/config.json:ro \
-              gcr.io/kaniko-project/executor:latest \
-                --context . \
-                --dockerfile=Dockerfile \
-                --destination docker.io/crisarbenuam/test:2.1
+          uses: docker/build-push-action@v6
+          with:
+            push: true
+            tags: docker.io/crisarbenuam/test:2.1
+#        - name: Build and push
+#          run: |
+#            cd java_app
+#            AUTH=$(echo -n crisarbenuam:${{ secrets.HARBOR_PASSWORD }} | base64)
+#            cat << EOF > config.json
+#            {
+#              "auths":{
+#                "docker.io/crisarbenuam":{
+#                  "username":"crisarbenuam","password":"${{ secrets.HARBOR_PASSWORD }}","auth":"${AUTH}"
+#                }
+#              }
+#            }
+#            EOF
+#            tree -a .
+#            docker run \
+#              -v $(pwd):/workspace \
+#              -v $(pwd)/config.json:/kaniko/.docker/config.json:ro \
+#              gcr.io/kaniko-project/executor:latest \
+#                --context . \
+#                --dockerfile=Dockerfile \
+#                --destination docker.io/crisarbenuam/test:2.1
