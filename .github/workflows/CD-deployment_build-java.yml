@@ -61,7 +61,6 @@
             path: ./java_app/staging/
         - uses: docker/login-action@v1
           with:
-            registry: crisarbenuam/test
             username: crisarbenuam
             password: ${{ secrets.HARBOR_PASSWORD }}
         - name: Build and push
