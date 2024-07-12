@@ -1,5 +1,5 @@
 # Parte 1: Construcción del JRE personalizado
-FROM eclipse-temurin:17 as corretto-jdk
+FROM amazoncorretto:17 as corretto-jdk
 
 RUN apk add --no-cache binutils
 
