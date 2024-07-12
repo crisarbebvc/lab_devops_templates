@@ -68,6 +68,7 @@
           uses: docker/build-push-action@v6
           with:
             push: true
+            context: ./java_app
             tags: docker.io/crisarbenuam/test:2.1
 #        - name: Build and push
 #          run: |
