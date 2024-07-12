@@ -69,7 +69,7 @@
           with:
             push: true
             context: ./java_app
-            file: ../dockerfile/Dockerfile
+            file: Dockerfile
             tags: docker.io/crisarbenuam/test:2.1
 #        - name: Build and push
 #          run: |
