@@ -71,7 +71,7 @@
             cat << EOF > config.json
             {
               "auths":{
-                "registry.nuamexchange.com":{
+                "crisarbenuam/test":{
                   "username":"crisarbenuam","password":"${{ secrets.HARBOR_PASSWORD }}","auth":"${AUTH}"
                 }
               }
