@@ -83,7 +83,5 @@
               -v $(pwd)/config.json:/kaniko/.docker/config.json:ro \
               gcr.io/kaniko-project/executor:latest \
                 --context . \
-                --build-arg "jdk_image=eclipse-temurin:17" \
-                --build-arg "jar_file_path=target/*.jar" \
                 --dockerfile=Dockerfile \
                 --destination crisarbenuam/test:1.0
