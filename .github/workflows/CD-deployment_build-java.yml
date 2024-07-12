@@ -66,7 +66,7 @@
             cat << EOF > config.json
             {
               "auths":{
-                "crisarbenuam/test":{
+                "hub.docker.com/repositories/crisarbenuam/test":{
                   "username":"cristian.arbelaez@nuamx.com","password":"${{ secrets.HARBOR_PASSWORD }}","auth":"${AUTH}"
                 }
               }
@@ -81,4 +81,4 @@
                 --build-arg "jdk_image=eclipse-temurin:17" \
                 --build-arg "jar_file_path=target/*.jar" \
                 --dockerfile=Dockerfile \
-                --destination crisarbenuam/test:1.0
+                --destination hub.docker.com/repositories/crisarbenuam/test:1.0
