@@ -69,7 +69,7 @@
             push: true
             context: ./java_app
             file: Dockerfile
-            tags: crisarbenuam/test:2.2
+            tags: crisarbenuam/test:2.3
 #        - name: Build and push
 #          run: |
 #            cd java_app
