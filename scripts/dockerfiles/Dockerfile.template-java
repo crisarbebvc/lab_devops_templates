@@ -1,7 +1,36 @@
+# Parte 1: Construcción del JRE personalizado
+FROM amazoncorretto:17-alpine as corretto-jdk
+
+RUN apk add --no-cache binutils
+
+RUN $JAVA_HOME/bin/jlink \
+         --verbose \
+         --add-modules ALL-MODULE-PATH \
+         --strip-debug \
+         --no-man-pages \
+         --no-header-files \
+         --compress=2 \
+         --output /customjre
+
+# Parte 2: Configuración de la imagen principal de la aplicación
 FROM alpine:latest
-# Etiqueta del maintainer
-LABEL maintainer="nuamx.com"
-# Copia el archivo JAR o binario compilado a la raíz de la imagen
-COPY target/*.jar app.jar
-# Comando de entrada para ejecutar la aplicación (ajusta según tu aplicación)
-CMD ["java", "-jar", "/app.jar"]
+ENV JAVA_HOME=/jre
+ENV PATH="${JAVA_HOME}/bin:${PATH}"
+
+COPY --from=corretto-jdk /customjre $JAVA_HOME
+
+RUN apk update && apk add --no-cache libc6-compat
+RUN apk add libstdc++
+ARG user=appuser
+RUN adduser --no-create-home -u 1000 -D $user
+
+RUN mkdir /app && \
+    chown -R $user /app
+
+USER 1000
+
+COPY --chown=1000:1000 target/*.jar /app/app.jar
+WORKDIR /app
+
+EXPOSE 8080
+ENTRYPOINT [ "/jre/bin/java", "-jar", "/app/app.jar" ]
